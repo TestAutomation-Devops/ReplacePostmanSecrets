@@ -1,0 +1,111 @@
+{
+	"info": {
+		"_postman_id": "bc7a5394-624d-4a62-aee1-b1b51c02abe7",
+		"name": "Spotify",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3054781"
+	},
+	"item": [
+		{
+			"name": "Get Albums",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.spotify.com/v1/artists/1vCWHaC5f2uS3yhpwWbIA6/albums?album_type=SINGLE&offset=20&limit=10",
+					"protocol": "https",
+					"host": [
+						"api",
+						"spotify",
+						"com"
+					],
+					"path": [
+						"v1",
+						"artists",
+						"1vCWHaC5f2uS3yhpwWbIA6",
+						"albums"
+					],
+					"query": [
+						{
+							"key": "album_type",
+							"value": "SINGLE"
+						},
+						{
+							"key": "offset",
+							"value": "20"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{access_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"const tokenRequest = {",
+					"    url: pm.environment.get(\"tokenUrl\"),",
+					"    method: 'POST',",
+					"    header : 'Content-Type:application/x-www-form-urlencoded',",
+					"    body : {",
+					"        mode: 'urlencoded',",
+					"        'urlencoded' : [",
+					"            {key: \"grant_type\", value : \"client_credentials\"},",
+					"            {key: \"client_id\", value : pm.environment.get(\"client_id\")},",
+					"            {key: \"client_secret\", value : pm.environment.get(\"client_secret\")},",
+					"        ]",
+					"    }",
+					"}",
+					"",
+					"pm.sendRequest(tokenRequest, function (error, response) {",
+					"",
+					"    if(error === null) {",
+					"        var response = response.json();",
+					"        console.log(response.access_token);",
+					"        pm.environment.set(\"access_token\", response.access_token)",
+					"    }",
+					"});"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
