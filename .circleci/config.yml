@@ -6,6 +6,7 @@ jobs:
     executor: newman/postman-newman-docker
     steps:
       - checkout
+      - run: 'ls'
       - run: './ReplaceSecrets.sh'
       - newman/newman-run:
           collection: ./Spotify.postman_collection.json
